@@ -1,2 +1,5 @@
-# uds
-UrbanDictionary CLI searcher
+# UDS - UrbanDictionary CLI searcher
+
+```
+pip install uds
+```
