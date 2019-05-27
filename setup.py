@@ -6,7 +6,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requisites = ['requests-html>=0.10.0']
+requisites = ['requests-html>=0.10.0', 'requests>=2.19.1']
 
 setup(
     name='uds',
