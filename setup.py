@@ -10,7 +10,7 @@ requisites = ['requests-html>=0.10.0', 'requests>=2.19.1']
 
 setup(
     name='uds',
-    version='0.1.2',
+    version='0.1.3',
     description='UrbanDictionary CLI searcher',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
