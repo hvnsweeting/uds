@@ -13,6 +13,7 @@ setup(
     version='0.1.2',
     description='UrbanDictionary CLI searcher',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     author='Viet Hung Nguyen',
     author_email='hvn@familug.org',
     url='https://github.com/hvnsweeting/uds',
