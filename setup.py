@@ -21,4 +21,5 @@ setup(
         'Environment :: Console',
     ],
     scripts=['uds'],
+    install_requires=requisites
 )
