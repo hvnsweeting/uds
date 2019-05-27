@@ -32,6 +32,10 @@ UrbanDictionary results for '31337'
   5.     Spelling of "elite" primarily favoured by the alphabetically impaired.
   6.     The prime number between 31333 and 31357.
   7.     1. The most highly prized and regarded ICQ number
+
+$ uds 520 -n1
+UrbanDictionary results for '520'
+  1.     Abbreviation for "I Love You" in net and SMS use in Chinese speaking world. It is an example of extensive use of numerical digits for their similar pronunciation of daily expressions in Chinese. In this case, 5 means "I", 2 means "love", 0 means "you".
 ```
 
 ## Authors
