@@ -24,6 +24,12 @@ def get_meanings(word):
         )
     )
     meaning_divs = r.html.xpath('//div[@class="meaning"]')
+    if not meaning_divs:
+        if "There are no definitions for this word" in r.html.full_text:
+            return []
+        else:
+            raise Exception("Unknown result for {}".format(word))
+
     for node in meaning_divs:
         yield node.text
 
@@ -41,28 +47,38 @@ def main():
         "--count",
         help="Number of meanings to display",
         type=int,
-        default=8
+        default=8,
     )
     args = parser.parse_args()
     word_to_search = " ".join(args.word)
     print("UrbanDictionary results for {!r}".format(word_to_search))
 
+    def normalize(text):
+        # NOTE unescape seems do not work as text missing `;`, e.g `&apos;` ->
+        # `&apos`, thus, use dirty replace
+        return html.unescape(text).replace("&apos", "'")
+
     def pad_lines(text, pad="   "):
         return "\n".join(
             (
-                "{pad}{line}".format(line=html.unescape(line), pad=pad)
+                "{pad}{line}".format(line=normalize(line), pad=pad)
                 for line in text.splitlines()
             )
         )
 
-    for idx, meaning in enumerate(get_meanings(word_to_search), start=1):
-        print("{:>3}.  {}".format(idx, pad_lines(meaning)))
+    meanings = get_meanings(word_to_search)
+    if not meanings:
+        sys.exit("There are no definitions for this word")
+
+    for idx, _meaning in enumerate(meanings, start=1):
+        print("{:>3}.  {}".format(idx, pad_lines(_meaning)))
         if idx == args.count:
             break
 
 
 def _test():
     import doctest
+
     doctest.testmod()
 
 
