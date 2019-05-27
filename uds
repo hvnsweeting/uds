@@ -5,9 +5,10 @@ __doc__ = "Simple CLI for searching word meanings from UrbanDictionary"
 
 import argparse
 import html
+import sys
+import urllib
 
 import requests_html
-import urllib
 
 
 def get_meanings(word):
