@@ -1,0 +1,2 @@
+# uds
+UrbanDictionary CLI searcher
