@@ -4,6 +4,9 @@
 
 [![PyPI version](https://badge.fury.io/py/uds.svg)](https://badge.fury.io/py/uds)
 
+## Version
+Python3 only
+
 ## Install
 
 ```
