@@ -6,11 +6,11 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requisites = ['requests-html>=0.10.0', 'requests>=2.19.1']
+requisites = ['requests-html>=0.10.0', 'requests>=2.19.1', 'crayons==0.2.0']
 
 setup(
     name='uds',
-    version='0.1.3',
+    version='0.1.4',
     description='UrbanDictionary CLI searcher',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
