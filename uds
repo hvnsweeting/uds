@@ -6,9 +6,20 @@ __doc__ = "Simple CLI for searching word meanings from UrbanDictionary"
 import argparse
 import html
 import sys
+import textwrap
 import urllib
 
 import requests_html
+import crayons
+
+
+def colorize(text, color, bold=False):
+    """
+    https://github.com/kennethreitz/crayons
+    Included colors are red, green, yellow, blue, black,
+    magenta, cyan, white, and normal
+    """
+    return eval("str(crayons.{}(text, bold=bold))".format(color))
 
 
 def get_meanings(word):
@@ -51,27 +62,43 @@ def main():
     )
     args = parser.parse_args()
     word_to_search = " ".join(args.word)
-    print("UrbanDictionary results for {!r}".format(word_to_search))
+    print(
+        colorize(
+            "UrbanDictionary results for {}".format(
+                colorize(word_to_search, "yellow", bold=True)
+            ),
+            "blue",
+            bold=True,
+        )
+    )
 
-    def normalize(text):
+    def normalize(text, padding=" " * 6):
         # NOTE unescape seems do not work as text missing `;`, e.g `&apos;` ->
         # `&apos`, thus, use dirty replace
-        return html.unescape(text).replace("&apos", "'")
+        cleaned = html.unescape(text).replace("&apos", "'")
+        cleaned = textwrap.fill(cleaned, width=120)
+        cleaned = textwrap.indent(cleaned, prefix=padding).strip()
+        return cleaned
 
-    def pad_lines(text, pad="   "):
-        return "\n".join(
+    def pad_lines(text, pad=""):
+        padded = "\n        ".join(
             (
                 "{pad}{line}".format(line=normalize(line), pad=pad)
                 for line in text.splitlines()
+                if line
             )
         )
+        return padded
 
     meanings = get_meanings(word_to_search)
     if not meanings:
-        sys.exit("There are no definitions for this word.")
+        sys.exit(crayons.red("There are no definitions for this word."))
 
     for idx, _meaning in enumerate(meanings, start=1):
-        print("{:>3}.  {}".format(idx, pad_lines(_meaning)))
+        result = "{:>2}{idx}.  {meaning}".format(
+            "", idx=colorize(idx, "red"), meaning=pad_lines(_meaning)
+        )
+        print(result)
         if idx == args.count:
             break
 

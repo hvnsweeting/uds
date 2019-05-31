@@ -13,6 +13,9 @@ Python3 only
 pip install uds
 ```
 
+## Example
+[![asciicast](https://asciinema.org/a/TOCYosZbUXr1pk7NDTuPYtXbS.png)](https://asciinema.org/a/TOCYosZbUXr1pk7NDTuPYtXbS)
+
 ## Usage
 
 ```
