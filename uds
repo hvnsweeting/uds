@@ -23,9 +23,6 @@ def colorize(text, color, bold=False):
 
 
 def cambridge(word):
-    import requests
-    import bs4
-
     URL = "https://dictionary.cambridge.org/dictionary/english/{}"
 
     sess = requests_html.HTMLSession()
