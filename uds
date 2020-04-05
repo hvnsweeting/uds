@@ -22,11 +22,28 @@ def colorize(text, color, bold=False):
     return eval("str(crayons.{}(text, bold=bold))".format(color))
 
 
-def get_meanings(word):
+def cambridge(word):
+    import requests
+    import bs4
+
+    URL = "https://dictionary.cambridge.org/dictionary/english/{}"
+
+    sess = requests_html.HTMLSession()
+    resp = sess.get(URL.format(urllib.parse.quote(word)))
+    ipa = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
+    for i in ipa:
+        print(i.text, end=" ")
+    print()
+
+    ms = resp.html.xpath('//div[@class="def ddef_d db"]')
+    return [m.text for m in ms]
+
+
+def urbandictionary(word):
     """
-    >>> "misleading" in " ".join(get_meanings("red herring"))
+    >>> "misleading" in " ".join(urbandictionary("red herring"))
     True
-    >>> "that feel when" in " ".join(get_meanings("tfw")).lower()
+    >>> "that feel when" in " ".join(urbandictionary("tfw")).lower()
     True
     """
     sess = requests_html.HTMLSession()
@@ -45,6 +62,13 @@ def get_meanings(word):
     return [node.text for node in meaning_divs]
 
 
+def get_meanings(word, source="urban"):
+    if source == "urban":
+        return urbandictionary(word)
+    else:
+        return cambridge(word)
+
+
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument(
@@ -52,6 +76,13 @@ def main():
         help="Word to search for meaning on UrbanDictionary",
         type=str,
         nargs="+",
+    )
+    parser.add_argument(
+        "-s",
+        "--source",
+        help="Which dictionary to search",
+        type=str,
+        default="urban",
     )
     parser.add_argument(
         "-n",
@@ -62,15 +93,6 @@ def main():
     )
     args = parser.parse_args()
     word_to_search = " ".join(args.word)
-    print(
-        colorize(
-            "UrbanDictionary results for {}".format(
-                colorize(word_to_search, "yellow", bold=True)
-            ),
-            "blue",
-            bold=True,
-        )
-    )
 
     def normalize(text, padding=" " * 6):
         # NOTE unescape seems do not work as text missing `;`, e.g `&apos;` ->
@@ -90,7 +112,22 @@ def main():
         )
         return padded
 
-    meanings = get_meanings(word_to_search)
+    if args.source == "urban":
+        dictionary = "UrbanDictionary"
+    elif "cam" in args.source:
+        dictionary = "Cambridge"
+
+    print(
+        colorize(
+            "{} results for {}".format(
+                dictionary, colorize(word_to_search, "yellow", bold=True)
+            ),
+            "blue",
+            bold=True,
+        )
+    )
+
+    meanings = get_meanings(word_to_search, source=args.source)
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 
