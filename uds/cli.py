@@ -17,7 +17,6 @@ def colorize(text, color, bold=False):
     return eval("str(crayons.{}(text, bold=bold))".format(color))
 
 
-
 def main():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument(
@@ -76,7 +75,7 @@ def main():
         )
     )
 
-    meanings = uds.get_meanings(word_to_search, source=args.source)
+    _url, meanings = uds.get_meanings(word_to_search, source=args.source)
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 
@@ -87,8 +86,6 @@ def main():
         print(result)
         if idx == args.count:
             break
-
-
 
 
 if __name__ == "__main__":
