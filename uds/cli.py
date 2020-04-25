@@ -1,16 +1,11 @@
-#!/usr/bin/env python
-# vim: ft=python
-# TODO support py2 if requests_html supports
-__doc__ = "Simple CLI for searching word meanings from UrbanDictionary"
-
 import argparse
 import html
+import crayons
 import sys
 import textwrap
-import urllib
 
-import requests_html
-import crayons
+
+import uds
 
 
 def colorize(text, color, bold=False):
@@ -21,49 +16,6 @@ def colorize(text, color, bold=False):
     """
     return eval("str(crayons.{}(text, bold=bold))".format(color))
 
-
-def cambridge(word):
-    URL = "https://dictionary.cambridge.org/dictionary/english/{}"
-
-    sess = requests_html.HTMLSession()
-    resp = sess.get(URL.format(urllib.parse.quote(word)))
-    ipa = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
-    for i in ipa:
-        print(i.text, end=" ")
-    print()
-
-    ms = resp.html.xpath('//div[@class="def ddef_d db"]')
-    return [m.text for m in ms]
-
-
-def urbandictionary(word):
-    """
-    >>> "misleading" in " ".join(urbandictionary("red herring"))
-    True
-    >>> "that feel when" in " ".join(urbandictionary("tfw")).lower()
-    True
-    """
-    sess = requests_html.HTMLSession()
-    r = sess.get(
-        "https://www.urbandictionary.com/define.php?term={}".format(
-            urllib.parse.quote(word)
-        )
-    )
-    meaning_divs = r.html.xpath('//div[@class="meaning"]')
-    if not meaning_divs:
-        if "There are no definitions for this word" in r.html.full_text:
-            return []
-        else:
-            raise Exception("Unknown result for {}: {}".format(word, r.html.text))
-
-    return [node.text for node in meaning_divs]
-
-
-def get_meanings(word, source="urban"):
-    if source == "urban":
-        return urbandictionary(word)
-    else:
-        return cambridge(word)
 
 
 def main():
@@ -124,7 +76,7 @@ def main():
         )
     )
 
-    meanings = get_meanings(word_to_search, source=args.source)
+    meanings = uds.get_meanings(word_to_search, source=args.source)
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 
@@ -137,10 +89,6 @@ def main():
             break
 
 
-def _test():
-    import doctest
-
-    doctest.testmod()
 
 
 if __name__ == "__main__":
