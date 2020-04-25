@@ -38,7 +38,7 @@ def urbandictionary(word):
     meaning_divs = r.html.xpath('//div[@class="meaning"]')
     if not meaning_divs:
         if "There are no definitions for this word" in r.html.full_text:
-            return []
+            return url, ["There are no definitions for this word"]
         else:
             raise Exception(
                 "Unknown result for {}: {}".format(word, r.html.text)
