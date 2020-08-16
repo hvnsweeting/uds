@@ -10,17 +10,19 @@ import requests_html
 
 
 def cambridge(word):
-    url = "https://dictionary.cambridge.org/dictionary/english/{}"
+    url = "https://dictionary.cambridge.org/dictionary/english/{}".format(
+        urllib.parse.quote(word)
+    )
 
     sess = requests_html.HTMLSession()
-    resp = sess.get(url.format(urllib.parse.quote(word)))
-    ipa = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
-    for i in ipa:
-        print(i.text, end=" ")
-    print()
+    resp = sess.get(url)
+    ipa_nodes = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
+    ipa = []
+    for i in ipa_nodes:
+        ipa.append(i.text)
 
     ms = resp.html.xpath('//div[@class="def ddef_d db"]')
-    return url, [m.text for m in ms]
+    return {'url':url, 'ipa': ipa, 'means': [m.text for m in ms]}
 
 
 def urbandictionary(word):
@@ -44,7 +46,7 @@ def urbandictionary(word):
                 "Unknown result for {}: {}".format(word, r.html.text)
             )
 
-    return url, [node.text for node in meaning_divs]
+    return {'url':url, 'ipa': '', 'means': [node.text for node in meaning_divs]}
 
 
 def get_meanings(word, source="urban"):

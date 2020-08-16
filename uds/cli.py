@@ -75,7 +75,8 @@ def main():
         )
     )
 
-    _url, meanings = uds.get_meanings(word_to_search, source=args.source)
+    result = uds.get_meanings(word_to_search, source=args.source)
+    meanings = result['means']
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 
