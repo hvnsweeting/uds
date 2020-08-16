@@ -22,7 +22,7 @@ def cambridge_fr(word, dictionary="french-english"):
     for i in ipa_nodes:
         ipa.append(i.text)
     ms = resp.html.xpath('//span[@class="trans dtrans"]')
-    return {"url": url, "ipa": ipa, "means": [m.text for m in ms]}
+    return {"url": url, "ipa": set(ipa), "means": {m.text for m in ms}}
 
 
 def cambridge(word, dictionary="english"):
@@ -40,7 +40,7 @@ def cambridge(word, dictionary="english"):
         ipa.append(i.text)
 
     ms = resp.html.xpath('//div[@class="def ddef_d db"]')
-    return {"url": url, "ipa": ipa, "means": [m.text for m in ms]}
+    return {"url": url, "ipa": set(ipa), "means": {m.text for m in ms}}
 
 
 def urbandictionary(word):
