@@ -56,6 +56,8 @@ def main():
         dictionary = "UrbanDictionary"
     elif "cam" in args.source:
         dictionary = "Cambridge"
+    elif "fr" in args.source:
+        dictionary = "fr"
 
     print(
         colorize(
@@ -69,9 +71,11 @@ def main():
 
     result = uds.get_meanings(word_to_search, source=args.source)
     meanings = result["means"]
+    ipa = result["ipa"]
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 
+    print(ipa)
     for idx, _meaning in enumerate(meanings, start=1):
         result = "{:>2}{idx}.  {meaning}".format(
             "", idx=colorize(idx, "red"), meaning=pad_lines(_meaning)

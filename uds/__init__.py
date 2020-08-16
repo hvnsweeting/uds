@@ -9,13 +9,31 @@ import urllib
 import requests_html
 
 
-def cambridge(word):
-    url = "https://dictionary.cambridge.org/dictionary/english/{}".format(
-        urllib.parse.quote(word)
+def cambridge_fr(word, dictionary="french-english"):
+    url = "https://dictionary.cambridge.org/dictionary/{}/{}".format(
+        dictionary, urllib.parse.quote(word)
     )
 
     sess = requests_html.HTMLSession()
     resp = sess.get(url)
+
+    ipa_nodes = resp.html.xpath('//span[@class="ipa dipa"]')
+    ipa = []
+    for i in ipa_nodes:
+        ipa.append(i.text)
+    ms = resp.html.xpath('//span[@class="trans dtrans"]')
+    return {"url": url, "ipa": ipa, "means": [m.text for m in ms]}
+
+
+def cambridge(word, dictionary="english"):
+
+    url = "https://dictionary.cambridge.org/dictionary/{}/{}".format(
+        dictionary, urllib.parse.quote(word)
+    )
+
+    sess = requests_html.HTMLSession()
+    resp = sess.get(url)
+
     ipa_nodes = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
     ipa = []
     for i in ipa_nodes:
@@ -54,6 +72,8 @@ def urbandictionary(word):
 def get_meanings(word, source="urban"):
     if source == "urban":
         return urbandictionary(word)
+    elif source == "fr":
+        return cambridge_fr(word)
     else:
         return cambridge(word)
 
