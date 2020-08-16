@@ -27,9 +27,9 @@ def cambridge(word):
 
 def urbandictionary(word):
     """
-    >>> "misleading" in " ".join(urbandictionary("red herring"))
+    >>> "misleading" in " ".join(urbandictionary("red herring")["means"])
     True
-    >>> "that feel when" in " ".join(urbandictionary("tfw")).lower()
+    >>> "that feel when" in " ".join(urbandictionary("tfw")["means"]).lower()
     True
     """
     sess = requests_html.HTMLSession()
