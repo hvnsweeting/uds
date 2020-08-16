@@ -26,18 +26,10 @@ def main():
         nargs="+",
     )
     parser.add_argument(
-        "-s",
-        "--source",
-        help="Which dictionary to search",
-        type=str,
-        default="urban",
+        "-s", "--source", help="Which dictionary to search", type=str, default="urban",
     )
     parser.add_argument(
-        "-n",
-        "--count",
-        help="Number of meanings to display",
-        type=int,
-        default=8,
+        "-n", "--count", help="Number of meanings to display", type=int, default=8,
     )
     args = parser.parse_args()
     word_to_search = " ".join(args.word)
@@ -76,7 +68,7 @@ def main():
     )
 
     result = uds.get_meanings(word_to_search, source=args.source)
-    meanings = result['means']
+    meanings = result["means"]
     if not meanings:
         sys.exit(crayons.red("There are no definitions for this word."))
 

@@ -22,7 +22,7 @@ def cambridge(word):
         ipa.append(i.text)
 
     ms = resp.html.xpath('//div[@class="def ddef_d db"]')
-    return {'url':url, 'ipa': ipa, 'means': [m.text for m in ms]}
+    return {"url": url, "ipa": ipa, "means": [m.text for m in ms]}
 
 
 def urbandictionary(word):
@@ -42,11 +42,13 @@ def urbandictionary(word):
         if "There are no definitions for this word" in r.html.full_text:
             return url, ["There are no definitions for this word"]
         else:
-            raise Exception(
-                "Unknown result for {}: {}".format(word, r.html.text)
-            )
+            raise Exception("Unknown result for {}: {}".format(word, r.html.text))
 
-    return {'url':url, 'ipa': '', 'means': [node.text for node in meaning_divs]}
+    return {
+        "url": url,
+        "ipa": "",
+        "means": [node.text for node in meaning_divs],
+    }
 
 
 def get_meanings(word, source="urban"):
