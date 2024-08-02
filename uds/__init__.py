@@ -38,7 +38,7 @@ def cambridge(word, dictionary="english"):
     sess = requests_html.HTMLSession()
     resp = sess.get(url)
 
-    ipa_nodes = resp.html.xpath('//span[@class="ipa dipa lpr-2 lpl-1"]')
+    ipa_nodes = resp.html.xpath('//*[@id="page-content"]//span[@class="ipa dipa lpr-2 lpl-1"]')
     ipa = []
     for i in ipa_nodes:
         ipa.append(i.text)
